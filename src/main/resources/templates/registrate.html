@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活動報名系統</title>
+    <link th:href="@{/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+    <h1>活動報名系統</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/findAllActivity}">活動列表</a></li>
+            <li><a th:href="@{/myActivity}">我的報名</a></li>
+
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section id="activities">
+        <h2>活動列表</h2>
+        <div class="activity-list">
+            <div class="activity-card">
+                <h3 th:text="${activity_info.name}">活動名稱</h3>
+                <p th:text="'id:' + ${activity_info.activityId}"></p>
+                <p th:text="'日期：' + ${#dates.format(activity_info.date, 'yyyy-MM-dd')}">日期</p>
+                <p th:text="'地點：' + ${activity_info.location}">地點</p>
+
+                <!-- 報名表單 -->
+                <form th:action="@{/registrate}" method="post" onsubmit="return validateForm()">
+                    <input type="hidden" name="activity" th:value="${activity_info.activityId}" />
+                    <input type="hidden" name="user" th:value="1000" />
+                    <input type="hidden" name="status" value="True" />
+                    <p>學號(必須是 9 位數字!)</p>
+                    <input type="text" id="studentId" name="studentId"
+                           pattern="^\d{9}$"
+                           required />
+                    <p>電子信箱(請符合郵件格式)</p>
+                    <input type ="email" name ="email" value =""/><br>
+                    <p>姓名</p>
+                    <input type ="pname" name ="pname" value =""/><br><br>
+                    <button type="submit" class="register-btn">送出報名</button><br>
+                </form>
+            </div>
+        </div>
+
+        </div>
+    </section>
+
+</main>
+</body>
+
+<script>
+    function validateForm() {
+        const studentIdInput = document.getElementById("studentId").value;
+        const studentIdRegex = /^\d{9}$/; // 9位數字正則表達式
+        if (!studentIdRegex.test(studentIdInput)) {
+            alert("Student ID 必須是 9 位數字!");
+            return false; // 阻止表單提交
+        }
+        return true;
+    }
+</script>
+
+</html>
